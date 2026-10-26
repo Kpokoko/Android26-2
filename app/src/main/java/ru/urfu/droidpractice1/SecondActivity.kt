@@ -1,6 +1,5 @@
 package ru.urfu.droidpractice1
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,14 +15,21 @@ class SecondActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
+
         binding = ActivitySecondBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.setNavigationOnClickListener { finish() }
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
-        binding.articleImage.load("https://preview.redd.it/hey-i-realized-something-spoilers-for-canto-10-v0-qflgg68kc1qh1.jpeg?auto=webp&s=d2f50f31efd3e8439767f79721a6991a0fb89353")
+        binding.articleImage.load(
+            "https://preview.redd.it/hey-i-realized-something-spoilers-for-canto-10-v0-qflgg68kc1qh1.jpeg?auto=webp&s=d2f50f31efd3e8439767f79721a6991a0fb89353"
+        )
 
-        val isRead = intent.getBooleanExtra(EXTRA_IS_READ, false)
+        val isRead = savedInstanceState?.getBoolean(EXTRA_IS_READ)
+            ?: intent.getBooleanExtra(EXTRA_IS_READ, false)
+
         binding.readSwitch.isChecked = isRead
 
         binding.readSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -66,6 +72,12 @@ class SecondActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
+        outState.putBoolean(
+            EXTRA_IS_READ,
+            binding.readSwitch.isChecked
+        )
+
         Log.d(TAG, "onSaveInstanceState")
     }
 
